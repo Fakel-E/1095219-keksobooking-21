@@ -1,22 +1,24 @@
 'use strict';
 
-const NumberElement = {
+const NumberConst = {
   OBJ: 8,
-  X: 100,
-  XX: 1100,
-  Y: 130,
-  YY: 630
+  X_MIN: 100,
+  X_MAX: 1100,
+  Y_MIN: 130,
+  Y_MAX: 630,
+  PRICE_MIN: 0,
+  PRICE_MAX: 1000000,
+  ROOM_GUEST_MIN: 1,
+  ROOM_GUEST_MAX: 3,
+  INDEX_MIN: 0
 };
-const TITLE_ARR = [`Заголовок1`, `Заголовок2`, `Заголовок3`];
-const PRICE_ARR = [`800`, `1000`, `2000`];
-const TYPE_ARR = [`palace`, `flat`, `house`, `bungalo`];
-const ROOMS_ARR = [`1`, `2`, `3`];
-const GUESTS_ARR = [`1`, `2`, `3`];
-const CHECKIN_ARR = [`12:00`, `13:00`, `14:00`];
-const CHECKOUT_ARR = [`12:00`, `13:00`, `14:00`];
-const FEATURES_ARR = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const DESCCRIPTION_ARR = [`описание1`, `описание2`, `описание3`];
-const PHOTOS_ARR = [
+const TITLE = [`Заголовок1`, `Заголовок2`, `Заголовок3`];
+const TYPE = [`palace`, `flat`, `house`, `bungalo`];
+const CHECKIN = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT = [`12:00`, `13:00`, `14:00`];
+const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const DESCCRIPTION = [`описание1`, `описание2`, `описание3`];
+const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
@@ -32,43 +34,59 @@ const pinTemplate = document.querySelector(`#pin`) // метка
     .querySelector(`.map__pin`);
 
 // функиция вызова рандомных значений
-const getRandomInRange = function (min, max) {
+const getRandomInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 // функиция вызова рандомных елементов
-const getRandomElement = function (array) {
+const getRandomElement = (array) => {
   return array[[getRandomInRange(0, array.length - 1)]];
+};
+
+// функция рандомной сортировки + изменения массива
+const mixArray = (massive) => {
+  for (let i = massive.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    let temp = massive[i];
+    massive[i] = massive[j];
+    massive[j] = temp;
+  }
+  massive.splice(NumberConst.INDEX_MIN, getRandomInRange(NumberConst.INDEX_MIN, massive.length - 1));
+  return massive;
 };
 
 // создаём массив объявлений с уникальными характеристиками
 const adverts = [];
 
-for (let i = 1; i <= NumberElement.X; i++) {
-  const locationX = getRandomInRange(NumberElement.X, NumberElement.XX);
-  const locationY = getRandomInRange(NumberElement.Y, NumberElement.YY);
-  adverts.push({
-    author: {
-      avatar: `img/avatars/user0` + i + `.png`
-    },
-    offer: {
-      title: getRandomElement(TITLE_ARR),
-      address: locationX + `, ` + locationY,
-      price: getRandomElement(PRICE_ARR),
-      type: getRandomElement(TYPE_ARR),
-      rooms: getRandomElement(ROOMS_ARR),
-      guests: getRandomElement(GUESTS_ARR),
-      checkin: getRandomElement(CHECKIN_ARR),
-      checkout: getRandomElement(CHECKOUT_ARR),
-      features: getRandomElement(FEATURES_ARR),
-      desccription: getRandomElement(DESCCRIPTION_ARR),
-      photos: getRandomElement(PHOTOS_ARR),
-    },
-    location: {
-      x: locationX, // х - ограничено размерами блока
-      y: locationY //  y - от 130 до 630
-    }
-  });
-}
+const generateAdvert = (massive) => {
+  for (let i = 1; i <= NumberConst.OBJ; i++) {
+    const locationX = getRandomInRange(NumberConst.X_MIN, NumberConst.X_MAX);
+    const locationY = getRandomInRange(NumberConst.Y_MIN, NumberConst.Y_MAX);
+    massive.push({
+      author: {
+        avatar: `img/avatars/user0${i}.png`
+      },
+      offer: {
+        title: getRandomElement(TITLE),
+        address: `${locationX}, ${locationY}`,
+        price: getRandomInRange(NumberConst.PRICE_MIN, NumberConst.PRICE_MAX),
+        type: getRandomElement(TYPE),
+        rooms: getRandomInRange(NumberConst.ROOM_GUEST_MIN, NumberConst.ROOM_GUEST_MAX),
+        guests: getRandomInRange(NumberConst.ROOM_GUEST_MIN, NumberConst.ROOM_GUEST_MAX),
+        checkin: getRandomElement(CHECKIN),
+        checkout: getRandomElement(CHECKOUT),
+        features: mixArray(FEATURES),
+        desccription: getRandomElement(DESCCRIPTION),
+        photos: getRandomElement(PHOTOS),
+      },
+      location: {
+        x: locationX, // х - ограничено размерами блока
+        y: locationY //  y - от 130 до 630
+      }
+    });
+  }
+  return massive;
+};
+
 
 // функция отрисовки меток
 const renderPin = function (pin) {
@@ -82,7 +100,8 @@ const renderPin = function (pin) {
   return pinElement;
 };
 
-// создаем фрагмент дома, который будет добавлять
+// создаем фрагмент дома, который будет добавлять + генерируем объявления
+generateAdvert(adverts);
 const fragmentPin = document.createDocumentFragment();
 for (let i = 0; i < adverts.length; i++) {
   fragmentPin.appendChild(renderPin(adverts[i]));
@@ -90,3 +109,4 @@ for (let i = 0; i < adverts.length; i++) {
 mapListElement.appendChild(fragmentPin);
 
 mapList.classList.remove(`map--faded`);
+
