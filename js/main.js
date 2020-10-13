@@ -110,9 +110,6 @@ const fragmentPin = document.createDocumentFragment();
 
 generateAdverts().forEach((item) => fragmentPin.appendChild(renderPin(item)));
 
-/* for (let i = 0; i < adverts.length; i++) {
-  fragmentPin.appendChild(renderPin(adverts[i]));
-}*/
 mapListElement.appendChild(fragmentPin);
 
 mapList.classList.remove(`map--faded`);
