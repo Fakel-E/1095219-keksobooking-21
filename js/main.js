@@ -1,23 +1,27 @@
 'use strict';
 
-const NumberConst = {
-  OBJ: 8,
+const INDEX_MIN = 0;
+const ADVERT = 8;
+const Coordinate = {
   X_MIN: 100,
   X_MAX: 1100,
   Y_MIN: 130,
-  Y_MAX: 630,
-  PRICE_MIN: 0,
-  PRICE_MAX: 1000000,
-  ROOM_GUEST_MIN: 1,
-  ROOM_GUEST_MAX: 3,
-  INDEX_MIN: 0
+  Y_MAX: 630
 };
-const TITLE = [`Заголовок1`, `Заголовок2`, `Заголовок3`];
-const TYPE = [`palace`, `flat`, `house`, `bungalo`];
-const CHECKIN = [`12:00`, `13:00`, `14:00`];
-const CHECKOUT = [`12:00`, `13:00`, `14:00`];
+const Price = {
+  MIN: 0,
+  MAX: 1000000
+};
+const RoomGuest = {
+  MIN: 1,
+  MAX: 3,
+};
+const TITLES = [`Заголовок1`, `Заголовок2`, `Заголовок3`];
+const TYPES = [`palace`, `flat`, `house`, `bungalo`];
+const CHECKINS = [`12:00`, `13:00`, `14:00`];
+const CHECKOUTS = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const DESCCRIPTION = [`описание1`, `описание2`, `описание3`];
+const DESCRIPTIONS = [`описание1`, `описание2`, `описание3`];
 const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
@@ -50,32 +54,33 @@ const mixArray = (massive) => {
     massive[i] = massive[j];
     massive[j] = temp;
   }
-  massive.splice(NumberConst.INDEX_MIN, getRandomInRange(NumberConst.INDEX_MIN, massive.length - 1));
+  massive.splice(INDEX_MIN, getRandomInRange(INDEX_MIN, massive.length - 1));
   return massive;
 };
 
-// создаём массив объявлений с уникальными характеристиками
-const adverts = [];
+const generateAdverts = () => {
+  // создаём массив объявлений с уникальными характеристиками
+  const adverts = [];
 
-const generateAdvert = (massive) => {
-  for (let i = 1; i <= NumberConst.OBJ; i++) {
-    const locationX = getRandomInRange(NumberConst.X_MIN, NumberConst.X_MAX);
-    const locationY = getRandomInRange(NumberConst.Y_MIN, NumberConst.Y_MAX);
-    massive.push({
+  // заполняем массив
+  for (let i = 1; i <= ADVERT; i++) {
+    const locationX = getRandomInRange(Coordinate.X_MIN, Coordinate.X_MAX);
+    const locationY = getRandomInRange(Coordinate.Y_MIN, Coordinate.Y_MAX);
+    adverts.push({
       author: {
         avatar: `img/avatars/user0${i}.png`
       },
       offer: {
-        title: getRandomElement(TITLE),
+        title: getRandomElement(TITLES),
         address: `${locationX}, ${locationY}`,
-        price: getRandomInRange(NumberConst.PRICE_MIN, NumberConst.PRICE_MAX),
-        type: getRandomElement(TYPE),
-        rooms: getRandomInRange(NumberConst.ROOM_GUEST_MIN, NumberConst.ROOM_GUEST_MAX),
-        guests: getRandomInRange(NumberConst.ROOM_GUEST_MIN, NumberConst.ROOM_GUEST_MAX),
-        checkin: getRandomElement(CHECKIN),
-        checkout: getRandomElement(CHECKOUT),
+        price: getRandomInRange(Price.MIN, Price.MAX),
+        type: getRandomElement(TYPES),
+        rooms: getRandomInRange(RoomGuest.MIN, RoomGuest.MAX),
+        guests: getRandomInRange(RoomGuest.MIN, RoomGuest.MAX),
+        checkin: getRandomElement(CHECKINS),
+        checkout: getRandomElement(CHECKOUTS),
         features: mixArray(FEATURES),
-        desccription: getRandomElement(DESCCRIPTION),
+        desccription: getRandomElement(DESCRIPTIONS),
         photos: getRandomElement(PHOTOS),
       },
       location: {
@@ -84,12 +89,12 @@ const generateAdvert = (massive) => {
       }
     });
   }
-  return massive;
+  return adverts;
 };
 
 
 // функция отрисовки меток
-const renderPin = function (pin) {
+const renderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
 
   pinElement.querySelector(`img`).src = pin.offer.photos;
@@ -101,11 +106,13 @@ const renderPin = function (pin) {
 };
 
 // создаем фрагмент дома, который будет добавлять + генерируем объявления
-generateAdvert(adverts);
 const fragmentPin = document.createDocumentFragment();
-for (let i = 0; i < adverts.length; i++) {
+
+generateAdverts().forEach((item) => fragmentPin.appendChild(renderPin(item)));
+
+/* for (let i = 0; i < adverts.length; i++) {
   fragmentPin.appendChild(renderPin(adverts[i]));
-}
+}*/
 mapListElement.appendChild(fragmentPin);
 
 mapList.classList.remove(`map--faded`);
