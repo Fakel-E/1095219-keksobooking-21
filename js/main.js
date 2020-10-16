@@ -45,30 +45,31 @@ const getRandomInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 // функиция вызова рандомных елементов
-const getRandomElement = (array) => {
-  return array[[getRandomInRange(0, array.length - 1)]];
+const getRandomElement = (items) => {
+  return items[[getRandomInRange(0, items.length - 1)]];
 };
 
 // функция рандомной сортировки + изменения массива
-const mixArray = (massive) => {
-  for (let i = massive.length - 1; i > 0; i--) {
+const mixArray = (elements) => {
+  for (let i = elements.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    let temp = massive[i];
-    massive[i] = massive[j];
-    massive[j] = temp;
+    let temp = elements[i];
+    elements[i] = elements[j];
+    elements[j] = temp;
   }
-  massive.splice(INDEX_MIN, getRandomInRange(INDEX_MIN, massive.length - 1));
-  return massive;
+  elements.splice(INDEX_MIN, getRandomInRange(INDEX_MIN, elements.length - 1));
+  return elements;
 };
 
-// создаём массив объявлений с уникальными характеристиками
-const adverts = [];
-const generateAdverts = (massive) => {
+
+const generateAdverts = () => {
+  // создаём массив объявлений с уникальными характеристиками
+  const ads = [];
   // заполняем массив
   for (let i = 1; i <= ADVERT; i++) {
     const locationX = getRandomInRange(Coordinate.X_MIN, Coordinate.X_MAX);
     const locationY = getRandomInRange(Coordinate.Y_MIN, Coordinate.Y_MAX);
-    massive.push({
+    ads.push({
       author: {
         avatar: `img/avatars/user0${i}.png`
       },
@@ -91,9 +92,10 @@ const generateAdverts = (massive) => {
       }
     });
   }
-  return massive;
+  return ads;
 };
 
+const adverts = generateAdverts();
 
 // функция отрисовки меток
 const renderPin = (pin) => {
@@ -108,9 +110,9 @@ const renderPin = (pin) => {
 };
 
 // функция создания элементов
-const makeElement = (tagName, className) => {
-  const element = document.createElement(tagName);
-  element.classList.add(className);
+const makeElement = (item, itemName) => {
+  const element = document.createElement(item);
+  element.classList.add(itemName);
   return element;
 };
 
@@ -131,24 +133,22 @@ const renderAdvert = (advert) => {
     mapElement.querySelector(`.popup__type`).textContent = `Бунгало`;
   } else if (advert.offer.type === `bungalo`) {
     mapElement.querySelector(`.popup__type`).textContent = `Дом`;
-  } // перевести условия в функцию
+  }
 
   mapElement.querySelector(`.popup__text--capacity`).textContent = `${advert.offer.rooms} комнаты для ${advert.offer.guests} гостей`;
   mapElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${advert.offer.checkin}, и выезд до ${advert.offer.checkout}`;
 
-  const liElems = mapElement.querySelector(`.popup__features`);
-  const featureMass = mapElement.querySelectorAll(`.popup__feature`);
+  const featuresUnit = mapElement.querySelector(`.popup__features`);
+  const featureUnits = mapElement.querySelectorAll(`.popup__feature`);
 
-  featureMass.forEach((item) => item.parentNode.removeChild(item));
-  /* for (let p = 0; p < featureMass.length; p++) {
-    featureMass[p].parentNode.removeChild(featureMass[p]);
-  }*/
+  featureUnits.forEach((item) => item.parentNode.removeChild(item));
 
-  for (let i = 0; i < advert.offer.features.length; i++) {
+  advert.offer.features.forEach((item) => {
     const featuresElement = makeElement(`li`, `popup__feature`);
-    featuresElement.classList.add(`popup__feature--${advert.offer.features[i]}`);
-    liElems.appendChild(featuresElement);
-  }
+    featuresElement.classList.add(`popup__feature--${item}`);
+    featuresUnit.appendChild(featuresElement);
+  });
+
   mapElement.querySelector(`.popup__description`).textContent = advert.offer.desccription;
   mapElement.querySelector(`.popup__photo`).src = advert.offer.photos;
   return mapElement;
@@ -156,7 +156,7 @@ const renderAdvert = (advert) => {
 
 // создаем фрагмент дома, который будет добавлять + генерируем объявления
 const fragmentPin = document.createDocumentFragment();
-generateAdverts(adverts).forEach((item) => fragmentPin.appendChild(renderPin(item)));
+adverts.forEach((item) => fragmentPin.appendChild(renderPin(item)));
 mapListElement.appendChild(fragmentPin);
 
 // создаем фрагмент дома, который будет добавлять
