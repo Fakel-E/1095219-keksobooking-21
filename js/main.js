@@ -36,37 +36,40 @@ const mapList = document.querySelector(`.map`);
 const pinTemplate = document.querySelector(`#pin`) // метка
     .content
     .querySelector(`.map__pin`);
+const cardTemplate = document.querySelector(`#card`) // объявление
+    .content
+    .querySelector(`.map__card`);
 
 // функиция вызова рандомных значений
 const getRandomInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 // функиция вызова рандомных елементов
-const getRandomElement = (array) => {
-  return array[[getRandomInRange(0, array.length - 1)]];
+const getRandomElement = (items) => {
+  return items[[getRandomInRange(0, items.length - 1)]];
 };
 
 // функция рандомной сортировки + изменения массива
-const mixArray = (massive) => {
-  for (let i = massive.length - 1; i > 0; i--) {
+const mixArray = (elements) => {
+  for (let i = elements.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    let temp = massive[i];
-    massive[i] = massive[j];
-    massive[j] = temp;
+    let temp = elements[i];
+    elements[i] = elements[j];
+    elements[j] = temp;
   }
-  massive.splice(INDEX_MIN, getRandomInRange(INDEX_MIN, massive.length - 1));
-  return massive;
+  elements.splice(INDEX_MIN, getRandomInRange(INDEX_MIN, elements.length - 1));
+  return elements;
 };
+
 
 const generateAdverts = () => {
   // создаём массив объявлений с уникальными характеристиками
-  const adverts = [];
-
+  const ads = [];
   // заполняем массив
   for (let i = 1; i <= ADVERT; i++) {
     const locationX = getRandomInRange(Coordinate.X_MIN, Coordinate.X_MAX);
     const locationY = getRandomInRange(Coordinate.Y_MIN, Coordinate.Y_MAX);
-    adverts.push({
+    ads.push({
       author: {
         avatar: `img/avatars/user0${i}.png`
       },
@@ -89,9 +92,10 @@ const generateAdverts = () => {
       }
     });
   }
-  return adverts;
+  return ads;
 };
 
+const adverts = generateAdverts();
 
 // функция отрисовки меток
 const renderPin = (pin) => {
@@ -105,12 +109,59 @@ const renderPin = (pin) => {
   return pinElement;
 };
 
+// функция создания элементов
+const makeElement = (item, itemName) => {
+  const element = document.createElement(item);
+  element.classList.add(itemName);
+  return element;
+};
+
+// функция отрисовки объявлений
+const renderAdvert = (advert) => {
+  const mapElement = cardTemplate.cloneNode(true);
+
+  mapElement.querySelector(`.popup__avatar`).src = advert.author.avatar;
+  mapElement.querySelector(`.popup__title`).alt = advert.offer.title;
+  mapElement.querySelector(`.popup__text--address`).textContent = advert.offer.address;
+  mapElement.querySelector(`.popup__text--price`).textContent = `${advert.offer.price} ₽/ночь`;
+
+  if (advert.offer.type === `palace`) {
+    mapElement.querySelector(`.popup__type`).textContent = `Дворец`;
+  } else if (advert.offer.type === `flat`) {
+    mapElement.querySelector(`.popup__type`).textContent = `Квартира`;
+  } else if (advert.offer.type === `bungalo`) {
+    mapElement.querySelector(`.popup__type`).textContent = `Бунгало`;
+  } else if (advert.offer.type === `bungalo`) {
+    mapElement.querySelector(`.popup__type`).textContent = `Дом`;
+  }
+
+  mapElement.querySelector(`.popup__text--capacity`).textContent = `${advert.offer.rooms} комнаты для ${advert.offer.guests} гостей`;
+  mapElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${advert.offer.checkin}, и выезд до ${advert.offer.checkout}`;
+
+  const featuresUnit = mapElement.querySelector(`.popup__features`);
+  const featureUnits = mapElement.querySelectorAll(`.popup__feature`);
+
+  featureUnits.forEach((item) => item.parentNode.removeChild(item));
+
+  advert.offer.features.forEach((item) => {
+    const featuresElement = makeElement(`li`, `popup__feature`);
+    featuresElement.classList.add(`popup__feature--${item}`);
+    featuresUnit.appendChild(featuresElement);
+  });
+
+  mapElement.querySelector(`.popup__description`).textContent = advert.offer.desccription;
+  mapElement.querySelector(`.popup__photo`).src = advert.offer.photos;
+  return mapElement;
+};
+
 // создаем фрагмент дома, который будет добавлять + генерируем объявления
 const fragmentPin = document.createDocumentFragment();
-
-generateAdverts().forEach((item) => fragmentPin.appendChild(renderPin(item)));
-
+adverts.forEach((item) => fragmentPin.appendChild(renderPin(item)));
 mapListElement.appendChild(fragmentPin);
+
+// создаем фрагмент дома, который будет добавлять
+const filter = document.querySelector(`.map__filters-container`);
+mapList.insertBefore(renderAdvert(adverts[0]), filter);
 
 mapList.classList.remove(`map--faded`);
 
