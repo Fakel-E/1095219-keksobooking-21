@@ -28,6 +28,7 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
 const NOT_VALID_REPORT = `Количество гостей больше, чем количество комнат`;
+const MOUSE_BUTTON = 1;
 
 // создаем переменную с элементом, куда копировать
 const mapListElement = document.querySelector(`.map__pins`);
@@ -169,20 +170,21 @@ const formElements = document.querySelectorAll(`.ad-form__element`);
 const houseFeature = document.querySelector(`#housing-features`);
 const formMain = document.querySelector(`.ad-form`);
 // Добавляем disabled на все элементы формы
-const addShutdown = (items) => {
-  items.forEach((item) => item.setAttribute(`disabled`, `disabled`));
+const addShutdown = (items, isDisabled) => {
+  items.forEach((item) => {
+    item.disabled = isDisabled;
+  });
 };
-addShutdown([houseFeature]);
-addShutdown([formHeader]);
-addShutdown(mapFilters);
-addShutdown(formElements);
+
+addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
 // ! завершили добавление disabled
 // Функция активации карты
 const activateMap = () => {
-  houseFeature.removeAttribute(`disabled`);
+  /* houseFeature.removeAttribute(`disabled`);
   formHeader.removeAttribute(`disabled`);
   mapFilters.forEach((element) => element.removeAttribute(`disabled`));
-  formElements.forEach((item) => item.removeAttribute(`disabled`));
+  formElements.forEach((item) => item.removeAttribute(`disabled`));*/
+  addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], false);
   mapList.classList.remove(`map--faded`);
   formMain.classList.remove(`ad-form--disabled`);
   mapListElement.appendChild(fragmentPin);
@@ -193,13 +195,13 @@ const mainButton = document.querySelector(`.map__pin--main`);
 const formAddress = document.querySelector(`#address`);
 
 const findAdress = (coordinateElem) => {
-  return `${parseInt(coordinateElem.style.left, 10)} ${parseInt(coordinateElem.style.top, 10)}`;
+  return `${parseInt(coordinateElem.style.left, 10)}, ${parseInt(coordinateElem.style.top, 10)}`;
 };
 formAddress.value = findAdress(mainButton);
 // Активируем карту
 mainButton.addEventListener(`mousedown`, (evt) => {
   // открываем карту по клику
-  if (evt.which === 1) {
+  if (evt.which === MOUSE_BUTTON) {
     activateMap();
   }
 });
@@ -231,11 +233,7 @@ selectRoom.addEventListener(`change`, () => {
   } else {
     selectGuest.setCustomValidity(``);
   }
-  if (guestCount > roomsCount) {
-    selectRoom.setCustomValidity(NOT_VALID_REPORT);
-  } else {
-    selectRoom.setCustomValidity(``);
-  }
+  selectRoom.setCustomValidity(guestCount > roomsCount ? NOT_VALID_REPORT : ``);
 });
 // Слушаем изменнения в гостях
 selectGuest.addEventListener(`change`, () => {
