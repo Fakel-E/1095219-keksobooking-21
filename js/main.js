@@ -180,10 +180,6 @@ addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
 // ! завершили добавление disabled
 // Функция активации карты
 const activateMap = () => {
-  /* houseFeature.removeAttribute(`disabled`);
-  formHeader.removeAttribute(`disabled`);
-  mapFilters.forEach((element) => element.removeAttribute(`disabled`));
-  formElements.forEach((item) => item.removeAttribute(`disabled`));*/
   addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], false);
   mapList.classList.remove(`map--faded`);
   formMain.classList.remove(`ad-form--disabled`);
@@ -220,6 +216,7 @@ const selectGuest = document.querySelector(`#capacity`);
 if (selectRoom.value < selectGuest.value) {
   selectRoom.setCustomValidity(NOT_VALID_REPORT);
 }
+
 // Слушаем изменнения в комнатах
 selectRoom.addEventListener(`change`, () => {
   const roomsCount = Number(selectRoom.value);
@@ -230,11 +227,14 @@ selectRoom.addEventListener(`change`, () => {
     selectRoom.setCustomValidity(NOT_VALID_REPORT);
   } else if (roomsCount === 100) {
     selectGuest.value = 0;
+  } else if (guestCount === 0 && roomsCount !== 100) {
+    selectGuest.setCustomValidity(`Здесь нельзя разместить гостей`);
   } else {
     selectGuest.setCustomValidity(``);
   }
   selectRoom.setCustomValidity(guestCount > roomsCount ? NOT_VALID_REPORT : ``);
 });
+
 // Слушаем изменнения в гостях
 selectGuest.addEventListener(`change`, () => {
   const roomsCount = Number(selectRoom.value);
@@ -243,9 +243,10 @@ selectGuest.addEventListener(`change`, () => {
     selectGuest.setCustomValidity(NOT_VALID_REPORT);
   } else if (roomsCount === 100 && guestCount !== 0) {
     selectGuest.setCustomValidity(`Выбранное количество комнат не для гостей`);
+  } else if (guestCount === 0 && roomsCount !== 100) {
+    selectGuest.setCustomValidity(`Здесь нельзя разместить гостей`);
   } else {
     selectGuest.setCustomValidity(``);
   }
 });
-
 
