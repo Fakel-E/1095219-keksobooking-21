@@ -27,6 +27,8 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
+const NOT_VALID_REPORT = `Количество гостей больше, чем количество комнат`;
+const MOUSE_BUTTON = 1;
 
 // создаем переменную с элементом, куда копировать
 const mapListElement = document.querySelector(`.map__pins`);
@@ -157,11 +159,94 @@ const renderAdvert = (advert) => {
 // создаем фрагмент дома, который будет добавлять + генерируем объявления
 const fragmentPin = document.createDocumentFragment();
 adverts.forEach((item) => fragmentPin.appendChild(renderPin(item)));
-mapListElement.appendChild(fragmentPin);
 
 // создаем фрагмент дома, который будет добавлять
 const filter = document.querySelector(`.map__filters-container`);
-mapList.insertBefore(renderAdvert(adverts[0]), filter);
 
-mapList.classList.remove(`map--faded`);
+// Находим элементы формы
+const mapFilters = document.querySelectorAll(`.map__filter`);
+const formHeader = document.querySelector(`.ad-form-header`);
+const formElements = document.querySelectorAll(`.ad-form__element`);
+const houseFeature = document.querySelector(`#housing-features`);
+const formMain = document.querySelector(`.ad-form`);
+// Добавляем disabled на все элементы формы
+const addShutdown = (items, isDisabled) => {
+  items.forEach((item) => {
+    item.disabled = isDisabled;
+  });
+};
+
+addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
+// ! завершили добавление disabled
+// Функция активации карты
+const activateMap = () => {
+  addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], false);
+  mapList.classList.remove(`map--faded`);
+  formMain.classList.remove(`ad-form--disabled`);
+  mapListElement.appendChild(fragmentPin);
+  mapList.insertBefore(renderAdvert(adverts[0]), filter);
+};
+
+const mainButton = document.querySelector(`.map__pin--main`);
+const formAddress = document.querySelector(`#address`);
+
+const findAdress = (coordinateElem) => {
+  return `${parseInt(coordinateElem.style.left, 10)}, ${parseInt(coordinateElem.style.top, 10)}`;
+};
+formAddress.value = findAdress(mainButton);
+// Активируем карту
+mainButton.addEventListener(`mousedown`, (evt) => {
+  // открываем карту по клику
+  if (evt.which === MOUSE_BUTTON) {
+    activateMap();
+  }
+});
+
+mainButton.addEventListener(`keydown`, (evt) => {
+  // открытие по Enter
+  if (evt.key === `Enter`) {
+    activateMap();
+  }
+});
+
+// Найдём инпуты для гостей и комнат
+const selectRoom = document.querySelector(`#room_number`);
+const selectGuest = document.querySelector(`#capacity`);
+// Проверяем сразу при загрузке страницы
+if (selectRoom.value < selectGuest.value) {
+  selectRoom.setCustomValidity(NOT_VALID_REPORT);
+}
+
+// Слушаем изменнения в комнатах
+selectRoom.addEventListener(`change`, () => {
+  const roomsCount = Number(selectRoom.value);
+  const guestCount = Number(selectGuest.value);
+  if (roomsCount === 1) {
+    selectGuest.value = selectRoom.value;
+  } else if (roomsCount === 2 && roomsCount < guestCount) {
+    selectRoom.setCustomValidity(NOT_VALID_REPORT);
+  } else if (roomsCount === 100) {
+    selectGuest.value = 0;
+  } else if (guestCount === 0 && roomsCount !== 100) {
+    selectGuest.setCustomValidity(`Здесь нельзя разместить гостей`);
+  } else {
+    selectGuest.setCustomValidity(``);
+  }
+  selectRoom.setCustomValidity(guestCount > roomsCount ? NOT_VALID_REPORT : ``);
+});
+
+// Слушаем изменнения в гостях
+selectGuest.addEventListener(`change`, () => {
+  const roomsCount = Number(selectRoom.value);
+  const guestCount = Number(selectGuest.value);
+  if (guestCount > roomsCount) {
+    selectGuest.setCustomValidity(NOT_VALID_REPORT);
+  } else if (roomsCount === 100 && guestCount !== 0) {
+    selectGuest.setCustomValidity(`Выбранное количество комнат не для гостей`);
+  } else if (guestCount === 0 && roomsCount !== 100) {
+    selectGuest.setCustomValidity(`Здесь нельзя разместить гостей`);
+  } else {
+    selectGuest.setCustomValidity(``);
+  }
+});
 
