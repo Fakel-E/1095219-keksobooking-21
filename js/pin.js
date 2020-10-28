@@ -20,6 +20,6 @@
   };
 
   window.pin = {
-    renderPin: renderPin,
+    renderPin
   };
 })();

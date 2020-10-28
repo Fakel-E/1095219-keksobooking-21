@@ -32,19 +32,19 @@
   const MOUSE_BUTTON = 1;
 
   window.const = {
-    INDEX_MIN: INDEX_MIN,
-    ADVERT: ADVERT,
-    Coordinate: Coordinate,
-    Price: Price,
-    RoomGuest: RoomGuest,
-    TITLES: TITLES,
-    TYPES: TYPES,
-    CHECKINS: CHECKINS,
-    CHECKOUTS: CHECKOUTS,
-    FEATURES: FEATURES,
-    DESCRIPTIONS: DESCRIPTIONS,
-    PHOTOS: PHOTOS,
-    NOT_VALID_REPORT: NOT_VALID_REPORT,
-    MOUSE_BUTTON: MOUSE_BUTTON
+    INDEX_MIN,
+    ADVERT,
+    Coordinate,
+    Price,
+    RoomGuest,
+    TITLES,
+    TYPES,
+    CHECKINS,
+    CHECKOUTS,
+    FEATURES,
+    DESCRIPTIONS,
+    PHOTOS,
+    NOT_VALID_REPORT,
+    MOUSE_BUTTON
   };
 })();

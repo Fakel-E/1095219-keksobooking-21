@@ -80,8 +80,8 @@
   const adverts = generateAdverts();
 
   window.advert = {
-    generateAdverts: generateAdverts,
-    renderAdvert: renderAdvert,
-    adverts: adverts
+    generateAdverts,
+    renderAdvert,
+    adverts
   };
 })();

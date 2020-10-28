@@ -36,6 +36,6 @@
   formAddress.value = window.util.findAdress(mainButton);
 
   window.map = {
-    activateMap: activateMap,
+    activateMap
   };
 })();

@@ -43,11 +43,11 @@
   };
 
   window.util = {
-    getRandomInRange: getRandomInRange,
-    getRandomElement: getRandomElement,
-    mixArray: mixArray,
-    makeElement: makeElement,
-    findAdress: findAdress,
-    addShutdown: addShutdown
+    getRandomInRange,
+    getRandomElement,
+    mixArray,
+    makeElement,
+    findAdress,
+    addShutdown
   };
 })();
