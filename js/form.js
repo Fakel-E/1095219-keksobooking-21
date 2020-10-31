@@ -22,7 +22,6 @@
       selectGuest.setCustomValidity(`Здесь нельзя разместить гостей`);
     } else {
       selectGuest.setCustomValidity(``);
-      selectRoom.setCustomValidity(``);
     }
     selectRoom.setCustomValidity(guestCount > roomsCount ? window.const.NOT_VALID_REPORT : ``);
   });
@@ -37,6 +36,10 @@
       validationMessage = window.const.NOT_VALID_REPORT;
     } else if (roomsCount === 100 && guestCount !== 0) {
       validationMessage = `Выбранное количество комнат не для гостей`;
+    }
+
+    if (validationMessage === ``) {
+      selectRoom.setCustomValidity(``);
     }
 
     selectGuest.setCustomValidity(validationMessage);
