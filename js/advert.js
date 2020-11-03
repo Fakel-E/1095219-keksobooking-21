@@ -7,9 +7,14 @@
   .content
   .querySelector(`.map__card`);
 
+  const imgTemplate = document.querySelector(`#popup__img`) // фотография
+  .content
+  .querySelector(`.popup__photo`);
+
   // функция отрисовки объявлений
   const renderAdvert = (advert) => {
     const mapElement = cardTemplate.cloneNode(true);
+    const imgMain = mapElement.querySelector(`.popup__photos`);
 
     mapElement.querySelector(`.popup__avatar`).src = advert.author.avatar;
     mapElement.querySelector(`.popup__title`).alt = advert.offer.title;
@@ -41,14 +46,17 @@
     });
 
     mapElement.querySelector(`.popup__description`).textContent = advert.offer.desccription;
-    mapElement.querySelector(`.popup__photo`).src = advert.offer.photos;
+
+    advert.offer.photos.forEach((item) => {
+      const imgElement = imgTemplate.cloneNode(true);
+      imgElement.src = item;
+      imgMain.appendChild(imgElement);
+    });
     return mapElement;
   };
 
-  const adverts = window.data.generateAdverts();
-
   window.advert = {
     renderAdvert,
-    adverts
   };
 })();
+
