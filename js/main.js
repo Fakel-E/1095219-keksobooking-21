@@ -1,17 +1,12 @@
 'use strict';
 
-
 const mainButton = document.querySelector(`.map__pin--main`);
 const mapListElement = document.querySelector(`.map__pins`);
 const filterCont = document.querySelector(`.map__filters-container`);
 const mapList = document.querySelector(`.map`);
 
-// Активируем карту
-mainButton.addEventListener(`click`, (evt) => {
-  // открываем карту по клику
-  if (evt.which === window.const.MOUSE_BUTTON) {
-    window.map.activateMap();
-  }
+const onMainButtonClick = () => {
+  window.map.activateMap();
 
   window.load((adverts) => {
     // создаем фрагмент дома, который будет добавлят
@@ -21,5 +16,9 @@ mainButton.addEventListener(`click`, (evt) => {
     mapListElement.appendChild(fragment);
     mapList.insertBefore(window.advert.renderAdvert(adverts[0]), filterCont);
   });
-});
+  mainButton.removeEventListener(`click`, onMainButtonClick);
+};
+
+// Активируем карту
+mainButton.addEventListener(`click`, onMainButtonClick);
 
