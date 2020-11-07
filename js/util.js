@@ -32,7 +32,12 @@
 
   // Возвращение координат
   const findAdress = (coordinateElem) => {
-    return `${parseInt(coordinateElem.style.left, 10)}, ${parseInt(coordinateElem.style.top, 10)}`;
+    const PinSize = {
+      X_HALF: 32.5,
+      Y: 65
+    };
+    const coordinatePin = `${(parseInt(coordinateElem.style.left, 10) + (PinSize.X_HALF))}, ${(parseInt(coordinateElem.style.top, 10) + PinSize.Y)}`;
+    return coordinatePin;
   };
 
   // Добавляем disabled на все элементы формы
