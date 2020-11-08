@@ -47,7 +47,7 @@
       }
     });
 
-    xhr.open(`POST`, URL);
+    xhr.open(`GET`, URL);
     xhr.send(data);
   };
 })();
