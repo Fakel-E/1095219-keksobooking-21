@@ -97,4 +97,36 @@
     timeIn.value = timeOut.value;
   });
 
+  const CoordStart = {
+    X: 570,
+    Y: 375
+  };
+
+  const form = document.querySelector(`.ad-form`);
+  const mainButton = document.querySelector(`.map__pin--main`);
+  const resetButton = document.querySelector(`.ad-form__reset`);
+  const formAddress = document.querySelector(`#address`);
+  // Находим элементы формы
+  const mapFilters = document.querySelectorAll(`.map__filter`);
+  const formHeader = document.querySelector(`.ad-form-header`);
+  const formElements = document.querySelectorAll(`.ad-form__element`);
+  const houseFeature = document.querySelector(`#housing-features`);
+
+  const onResetButtonClick = function (evt) {
+    evt.preventDefault();
+    window.util.addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
+    form.reset();
+    window.pin.deleteMark(`.map__pin`);
+    mainButton.style.left = `${CoordStart.X}px`;
+    mainButton.style.top = `${CoordStart.Y}px`;
+    formAddress.value = window.util.findAdress(mainButton);
+    const mapCard = document.querySelector(`.map__card`);
+    if (mapCard) {
+      mapCard.remove();
+    }
+    resetButton.removeEventListener(`click`, onResetButtonClick);
+    mainButton.addEventListener(`click`, window.main.onMainButtonClick);
+  };
+  resetButton.addEventListener(`click`, onResetButtonClick);
+
 })();

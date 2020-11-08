@@ -26,7 +26,17 @@
     return pinElement;
   };
 
+  const deleteMark = (className) => {
+    const pins = document.querySelectorAll(className);
+    pins.forEach((pin) => {
+      if (!pin.classList.contains(`map__pin--main`)) {
+        pin.remove();
+      }
+    });
+  };
+
   window.pin = {
-    renderPin
+    renderPin,
+    deleteMark
   };
 })();
