@@ -112,22 +112,32 @@
   const formHeader = document.querySelector(`.ad-form-header`);
   const formElements = document.querySelectorAll(`.ad-form__element`);
   const houseFeature = document.querySelector(`#housing-features`);
+  const mapList = document.querySelector(`.map`);
 
-  const onResetButtonClick = function (evt) {
-    evt.preventDefault();
+  const reboot = () => {
     window.util.addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
+    mapList.classList.add(`map--faded`);
     form.reset();
     window.pin.deleteMark(`.map__pin`);
-    mainButton.style.left = `${CoordStart.X}px`;
-    mainButton.style.top = `${CoordStart.Y}px`;
-    formAddress.value = window.util.findAdress(mainButton);
     const mapCard = document.querySelector(`.map__card`);
     if (mapCard) {
       mapCard.remove();
     }
+    form.classList.add(`ad-form--disabled`);
+  };
+
+  const onResetButtonClick = (evt) => {
+    evt.preventDefault();
+    reboot();
+    mainButton.style.left = `${CoordStart.X}px`;
+    mainButton.style.top = `${CoordStart.Y}px`;
+    formAddress.value = window.util.findAdress(mainButton);
     resetButton.removeEventListener(`click`, onResetButtonClick);
     mainButton.addEventListener(`click`, window.main.onMainButtonClick);
   };
   resetButton.addEventListener(`click`, onResetButtonClick);
 
+  window.form = {
+    reboot
+  };
 })();
