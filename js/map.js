@@ -12,8 +12,9 @@
   const houseFeature = document.querySelector(`#housing-features`);
   const formMain = document.querySelector(`.ad-form`);
 
+  // ! добавление disabled
   window.util.addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
-  // ! завершили добавление disabled
+
   // Функция активации карты
   const activateMap = () => {
     window.util.addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], false);
