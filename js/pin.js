@@ -26,17 +26,33 @@
     return pinElement;
   };
 
-  const deleteMark = (className) => {
-    const pins = document.querySelectorAll(className);
-    pins.forEach((pin) => {
+  const deleteMarks = (className) => {
+    document.querySelectorAll(className).forEach((pin) => {
       if (!pin.classList.contains(`map__pin--main`)) {
         pin.remove();
       }
     });
   };
 
+  const MAX_RENDERING_ADVERTS = 5;
+  const renderPins = (adverts) => {
+    const fragment = document.createDocumentFragment();
+    const mapListElement = document.querySelector(`.map__pins`);
+
+    const advertsLengths = adverts.length >= MAX_RENDERING_ADVERTS ? MAX_RENDERING_ADVERTS : adverts.length;
+    // adverts.forEach((item) => fragment.appendChild(window.pin.renderPin(item)));
+
+    for (let i = 0; i < advertsLengths; i++) {
+      fragment.appendChild(window.pin.renderPin(adverts[i]));
+    }
+    mapListElement.appendChild(fragment);
+  };
+
   window.pin = {
     renderPin,
-    deleteMark
+    deleteMarks,
+    renderPins
   };
 })();
+
+

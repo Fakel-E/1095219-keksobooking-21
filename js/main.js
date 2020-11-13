@@ -3,23 +3,33 @@
 (() => {
 
   const mainButton = document.querySelector(`.map__pin--main`);
-  const mapListElement = document.querySelector(`.map__pins`);
-  const filterCont = document.querySelector(`.map__filters-container`);
-  const mapList = document.querySelector(`.map`);
+  const mapFilters = document.querySelector(`.map__filters`);
+  const house = mapFilters.querySelector(`#housing-type`);
+  let arrayAdverts = [];
 
   const onMainButtonClick = () => {
     window.map.activateMap();
 
     window.load((adverts) => {
-      // создаем фрагмент дома, который будет добавлят
-      const fragment = document.createDocumentFragment();
-
-      adverts.forEach((item) => fragment.appendChild(window.pin.renderPin(item)));
-      mapListElement.appendChild(fragment);
-      mapList.insertBefore(window.advert.renderAdvert(adverts[0]), filterCont);
+      window.pin.renderPins(adverts);
+      arrayAdverts = adverts;
     });
     mainButton.removeEventListener(`click`, onMainButtonClick);
   };
+
+  house.addEventListener(`change`, () => {
+    const newAdverts = window.filter.houseType(arrayAdverts);
+    const mapCard = document.querySelector(`.map__card`);
+    window.pin.deleteMarks(`.map__pin`);
+    if (house.value !== `any`) {
+      window.pin.renderPins(newAdverts);
+    } else {
+      window.pin.renderPins(arrayAdverts);
+    }
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
 
   const form = document.querySelector(`.ad-form`);
 
