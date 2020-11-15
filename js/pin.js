@@ -26,12 +26,10 @@
     return pinElement;
   };
 
-  const deleteMarks = (className) => {
-    document.querySelectorAll(className).forEach((pin) => {
-      if (!pin.classList.contains(`map__pin--main`)) {
-        pin.remove();
-      }
-    });
+  const deleteMarks = () => {
+    document
+      .querySelectorAll(`.map__pin:not(.map__pin--main)`)
+      .forEach((pin) => pin.remove());
   };
 
   const MAX_RENDERING_ADVERTS = 5;
