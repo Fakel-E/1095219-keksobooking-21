@@ -40,7 +40,6 @@
     const mapListElement = document.querySelector(`.map__pins`);
 
     const advertsLengths = adverts.length >= MAX_RENDERING_ADVERTS ? MAX_RENDERING_ADVERTS : adverts.length;
-    // adverts.forEach((item) => fragment.appendChild(window.pin.renderPin(item)));
 
     for (let i = 0; i < advertsLengths; i++) {
       fragment.appendChild(window.pin.renderPin(adverts[i]));

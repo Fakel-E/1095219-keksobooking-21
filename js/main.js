@@ -3,8 +3,8 @@
 (() => {
 
   const mainButton = document.querySelector(`.map__pin--main`);
-  const mapFilters = document.querySelector(`.map__filters`);
-  const house = mapFilters.querySelector(`#housing-type`);
+  const filters = document.querySelector(`.map__filters`);
+
   let arrayAdverts = [];
 
   const onMainButtonClick = () => {
@@ -17,19 +17,7 @@
     mainButton.removeEventListener(`click`, onMainButtonClick);
   };
 
-  house.addEventListener(`change`, () => {
-    const newAdverts = window.filter.houseType(arrayAdverts);
-    const mapCard = document.querySelector(`.map__card`);
-    window.pin.deleteMarks(`.map__pin`);
-    if (house.value !== `any`) {
-      window.pin.renderPins(newAdverts);
-    } else {
-      window.pin.renderPins(arrayAdverts);
-    }
-    if (mapCard) {
-      mapCard.remove();
-    }
-  });
+  filters.addEventListener(`change`, window.filter.getFilters(arrayAdverts));
 
   const form = document.querySelector(`.ad-form`);
 
