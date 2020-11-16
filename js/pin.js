@@ -1,55 +1,50 @@
 'use strict';
 
-(() => {
-
-  // создаем переменные с шаблоном, которые копировать
-  const pinTemplate = document.querySelector(`#pin`) // метка
+// создаем переменные с шаблоном, которые копировать
+const pinTemplate = document.querySelector(`#pin`) // метка
   .content
   .querySelector(`.map__pin`);
 
-  const filterCont = document.querySelector(`.map__filters-container`);
-  const mapList = document.querySelector(`.map`);
+const filterCont = document.querySelector(`.map__filters-container`);
+const mapList = document.querySelector(`.map`);
 
-  // функция отрисовки меток
-  const renderPin = (pin) => {
-    const pinElement = pinTemplate.cloneNode(true);
+// функция отрисовки меток
+const renderPin = (pin) => {
+  const pinElement = pinTemplate.cloneNode(true);
 
-    pinElement.querySelector(`img`).src = pin.author.avatar;
-    pinElement.querySelector(`img`).alt = pin.offer.title;
-    pinElement.style.left = pin.location.x + `px`;
-    pinElement.style.top = pin.location.y + `px`;
+  pinElement.querySelector(`img`).src = pin.author.avatar;
+  pinElement.querySelector(`img`).alt = pin.offer.title;
+  pinElement.style.left = pin.location.x + `px`;
+  pinElement.style.top = pin.location.y + `px`;
 
-    pinElement.addEventListener(`click`, function () {
-      mapList.insertBefore(window.advert.renderAdvert(pin), filterCont);
-    });
+  pinElement.addEventListener(`click`, function () {
+    mapList.insertBefore(window.advert.renderAdvert(pin), filterCont);
+  });
 
-    return pinElement;
-  };
+  return pinElement;
+};
 
-  const deleteMarks = () => {
-    document
-      .querySelectorAll(`.map__pin:not(.map__pin--main)`)
-      .forEach((pin) => pin.remove());
-  };
+const deleteMarks = () => {
+  document
+    .querySelectorAll(`.map__pin:not(.map__pin--main)`)
+    .forEach((pin) => pin.remove());
+};
 
-  const MAX_RENDERING_ADVERTS = 5;
-  const renderPins = (adverts) => {
-    const fragment = document.createDocumentFragment();
-    const mapListElement = document.querySelector(`.map__pins`);
+const MAX_RENDERING_ADVERTS = 5;
+const renderPins = (adverts) => {
+  const fragment = document.createDocumentFragment();
+  const mapListElement = document.querySelector(`.map__pins`);
 
-    const advertsLengths = adverts.length >= MAX_RENDERING_ADVERTS ? MAX_RENDERING_ADVERTS : adverts.length;
+  const advertsLengths = adverts.length >= MAX_RENDERING_ADVERTS ? MAX_RENDERING_ADVERTS : adverts.length;
 
-    for (let i = 0; i < advertsLengths; i++) {
-      fragment.appendChild(window.pin.renderPin(adverts[i]));
-    }
-    mapListElement.appendChild(fragment);
-  };
+  for (let i = 0; i < advertsLengths; i++) {
+    fragment.appendChild(window.pin.renderPin(adverts[i]));
+  }
+  mapListElement.appendChild(fragment);
+};
 
-  window.pin = {
-    renderPin,
-    deleteMarks,
-    renderPins
-  };
-})();
-
-
+window.pin = {
+  renderPin,
+  deleteMarks,
+  renderPins
+};
