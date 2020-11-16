@@ -3,33 +3,16 @@
 (() => {
 
   const mainButton = document.querySelector(`.map__pin--main`);
-  const mapFilters = document.querySelector(`.map__filters`);
-  const house = mapFilters.querySelector(`#housing-type`);
-  let arrayAdverts = [];
 
   const onMainButtonClick = () => {
     window.map.activateMap();
 
     window.load((adverts) => {
       window.pin.renderPins(adverts);
-      arrayAdverts = adverts;
+      window.main.arrayAdverts = adverts;
     });
     mainButton.removeEventListener(`click`, onMainButtonClick);
   };
-
-  house.addEventListener(`change`, () => {
-    const newAdverts = window.filter.houseType(arrayAdverts);
-    const mapCard = document.querySelector(`.map__card`);
-    window.pin.deleteMarks(`.map__pin`);
-    if (house.value !== `any`) {
-      window.pin.renderPins(newAdverts);
-    } else {
-      window.pin.renderPins(arrayAdverts);
-    }
-    if (mapCard) {
-      mapCard.remove();
-    }
-  });
 
   const form = document.querySelector(`.ad-form`);
 
