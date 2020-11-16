@@ -135,6 +135,43 @@ const onResetButtonClick = (evt) => {
 };
 resetButton.addEventListener(`click`, onResetButtonClick);
 
+// загрузка аватара и комнаты
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+
+const fileAvatar = document.querySelector(`#avatar`);
+const previewAvatar = document.querySelector(`#avatar__preview`);
+const imagesHome = document.querySelector(`#images`);
+const previewImagesHome = document.querySelector(`.ad-form__photo`);
+
+const getPictureOfUser = (foto, demonstrate) => {
+  foto.addEventListener(`change`, () => {
+    const file = foto.files[0];
+    const fileName = file.name.toLowerCase();
+
+    const matches = FILE_TYPES.some((it) => {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      const reader = new FileReader();
+
+      reader.addEventListener(`load`, () => {
+        if (demonstrate.matches(`.ad-form__photo`)) {
+          const imgPreview = document.createElement(`img`);
+          demonstrate.appendChild(imgPreview);
+          imgPreview.src = reader.result;
+        } else {
+          demonstrate.src = reader.result;
+        }
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
+};
+getPictureOfUser(fileAvatar, previewAvatar);
+getPictureOfUser(imagesHome, previewImagesHome);
+
 window.form = {
   reboot
 };
