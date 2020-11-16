@@ -116,7 +116,7 @@ const reboot = () => {
   window.util.addShutdown([houseFeature, formHeader, ...mapFilters, ...formElements], true);
   mapList.classList.add(`map--faded`);
   form.reset();
-  window.pin.deleteMark(`.map__pin`);
+  window.pin.deleteMarks();
   const mapCard = document.querySelector(`.map__card`);
   if (mapCard) {
     mapCard.remove();
