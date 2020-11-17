@@ -1,6 +1,6 @@
 'use strict';
 
-const URL_SERVER = `https://21.javascript.pages.academy/keksobooking/data`;
+const URL_SERVER = `https://21.javascript.pages.academy/keksobooking`;
 const sendSuccess = document.querySelector(`#success`)
   .content
   .querySelector(`.success`);
@@ -46,6 +46,6 @@ window.upload = (data, onSuccess) => {
     }
   });
 
-  xhr.open(`GET`, URL_SERVER);
+  xhr.open(`POST`, URL_SERVER);
   xhr.send(data);
 };
