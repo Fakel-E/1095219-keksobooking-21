@@ -8,7 +8,6 @@ const sendError = document.querySelector(`#error`)
   .content
   .querySelector(`.error`);
 const mapListElement = document.querySelector(`.map__pins`);
-const STATUS_OK = 200;
 
 window.upload = (data, onSuccess) => {
   const xhr = new XMLHttpRequest();
@@ -19,7 +18,7 @@ window.upload = (data, onSuccess) => {
 
   xhr.addEventListener(`load`, () => {
     onSuccess(xhr.response);
-    if (xhr.status === STATUS_OK) {
+    if (xhr.status === window.const.STATUS_OK) {
       const normalSend = sendSuccess.cloneNode(true);
       mapListElement.appendChild(normalSend);
       normalSend.addEventListener(`click`, () => {

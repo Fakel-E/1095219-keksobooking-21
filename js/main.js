@@ -1,15 +1,17 @@
 'use strict';
 
-const mainButton = document.querySelector(`.map__pin--main`);
+const keyButton = document.querySelector(`.map__pin--main`);
 
-const onMainButtonClick = () => {
-  window.map.activateMap();
+window.form.address.value = window.util.findAdress(keyButton);
+
+const onKeyButtonClick = () => {
+  window.map.activatePage(keyButton);
 
   window.load((adverts) => {
-    window.pin.renderPins(adverts);
+    window.pin.renderMarks(adverts);
     window.main.arrayAdverts = adverts;
   });
-  mainButton.removeEventListener(`click`, onMainButtonClick);
+  keyButton.removeEventListener(`click`, onKeyButtonClick);
 };
 
 const form = document.querySelector(`.ad-form`);
@@ -17,15 +19,17 @@ const form = document.querySelector(`.ad-form`);
 form.addEventListener(`submit`, (evt) => {
   window.upload(new FormData(form), () => {
     window.form.reboot();
-    mainButton.addEventListener(`click`, onMainButtonClick);
+    keyButton.addEventListener(`click`, onKeyButtonClick);
   });
   evt.preventDefault();
 });
 
 // Активируем карту
-mainButton.addEventListener(`click`, onMainButtonClick);
+keyButton.addEventListener(`click`, onKeyButtonClick);
 
 window.main = {
-  onMainButtonClick
+  onKeyButtonClick,
+  keyButton,
+  form
 };
 

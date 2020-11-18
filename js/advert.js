@@ -1,5 +1,12 @@
 'use strict';
 
+const PopupType = {
+  BUNGALO: `bungalo`,
+  FLAT: `flat`,
+  HOUSE: `house`,
+  PALACE: `palace`
+};
+
 // создаем переменные с шаблоном, которые копировать
 const cardTemplate = document.querySelector(`#card`) // объявление
   .content
@@ -10,7 +17,7 @@ const imgTemplate = document.querySelector(`#popup__img`) // фотографи�
   .querySelector(`.popup__photo`);
 
 // функция отрисовки объявлений
-const renderAdvert = (advert) => {
+const renderPopup = (advert) => {
   const popup = cardTemplate.cloneNode(true);
   const imgMain = popup.querySelector(`.popup__photos`);
   const mapCard = document.querySelector(`.map__card`);
@@ -23,13 +30,13 @@ const renderAdvert = (advert) => {
   popup.querySelector(`.popup__text--address`).textContent = advert.offer.address;
   popup.querySelector(`.popup__text--price`).textContent = `${advert.offer.price} ₽/ночь`;
 
-  if (advert.offer.type === `palace`) {
+  if (advert.offer.type === PopupType.PALACE) {
     popup.querySelector(`.popup__type`).textContent = `Дворец`;
-  } else if (advert.offer.type === `flat`) {
+  } else if (advert.offer.type === PopupType.FLAT) {
     popup.querySelector(`.popup__type`).textContent = `Квартира`;
-  } else if (advert.offer.type === `bungalo`) {
+  } else if (advert.offer.type === PopupType.BUNGALO) {
     popup.querySelector(`.popup__type`).textContent = `Бунгало`;
-  } else if (advert.offer.type === `bungalo`) {
+  } else if (advert.offer.type === PopupType.HOUSE) {
     popup.querySelector(`.popup__type`).textContent = `Дом`;
   }
 
@@ -70,6 +77,6 @@ const renderAdvert = (advert) => {
 };
 
 window.advert = {
-  renderAdvert,
+  renderPopup,
+  PopupType
 };
-

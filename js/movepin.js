@@ -2,18 +2,6 @@
 
 const mainButton = document.querySelector(`.map__pin--main`);
 
-const PinSize = {
-  X_HALF: 33,
-  Y: 65
-};
-
-const StopeMove = {
-  X_MIN: 0,
-  X_MAX: 1200,
-  Y_MIN: 130,
-  Y_MAX: 630
-};
-
 mainButton.addEventListener(`mousedown`, (evt) => {
   evt.preventDefault();
 
@@ -43,16 +31,16 @@ mainButton.addEventListener(`mousedown`, (evt) => {
     const postionLeft = parseInt(mainButton.style.left, 10);
     const positionTop = parseInt(mainButton.style.top, 10);
 
-    if (postionLeft <= StopeMove.X_MIN - PinSize.X_HALF) {
-      mainButton.style.left = `${StopeMove.X_MIN - PinSize.X_HALF}px`;
-    } else if (postionLeft >= StopeMove.X_MAX - PinSize.X_HALF) {
-      mainButton.style.left = `${StopeMove.X_MAX - PinSize.X_HALF}px`;
+    if (postionLeft <= window.const.StopeMove.X_MIN - window.const.PinSize.X_HALF) {
+      mainButton.style.left = `${window.const.StopeMove.X_MIN - window.const.PinSize.X_HALF}px`;
+    } else if (postionLeft >= window.const.StopeMove.X_MAX - window.const.PinSize.X_HALF) {
+      mainButton.style.left = `${window.const.StopeMove.X_MAX - window.const.PinSize.X_HALF}px`;
     }
-    if (positionTop <= StopeMove.Y_MIN - PinSize.Y) {
-      mainButton.style.top = `${StopeMove.Y_MIN - PinSize.Y}px`;
+    if (positionTop <= window.const.StopeMove.Y_MIN - window.const.PinSize.Y) {
+      mainButton.style.top = `${window.const.StopeMove.Y_MIN - window.const.PinSize.Y}px`;
 
-    } else if (positionTop >= StopeMove.Y_MAX) {
-      mainButton.style.top = `${StopeMove.Y_MAX}px`;
+    } else if (positionTop >= window.const.StopeMove.Y_MAX) {
+      mainButton.style.top = `${window.const.StopeMove.Y_MAX}px`;
     }
 
     formAddress.value = window.util.findAdress(mainButton);
