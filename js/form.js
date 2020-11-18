@@ -130,7 +130,9 @@ getPictureOfUser(imagesHome, previewImagesHome);
 const removePictureOfUser = () => {
   previewAvatar.src = `img/muffin-grey.svg`;
   const imgPreview = document.querySelector(`.new-img`);
-  imgPreview.remove();
+  if (imgPreview) {
+    imgPreview.remove();
+  }
 };
 
 const reboot = () => {
